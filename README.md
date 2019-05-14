@@ -22,9 +22,13 @@ two options in the "Experiment Type" based upon the requirements.
 
 # Getting Started
 
-After booting is complete, log onto either the `enb1` or `epc`
-nodes. From there, you will be able to start all OAI services across
-the network by running:
+After booting is complete, you will be able to start all OAI services with a single command.
+
+For Simulated UE, log onto `epc` node and run:
+
+    sudo /local/repository/bin/start_oai.pl -r sim
+
+Else, log onto either the `enb1` or `epc` nodes. From there, you will be able to start all OAI services across the network by running:
 
     sudo /local/repository/bin/start_oai.pl
 
