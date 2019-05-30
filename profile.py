@@ -39,7 +39,13 @@ For more detailed information:
 """;
 
 tourInstructions = """
-After booting is complete,
+After your experiment swapped in succesfully (i.e., is in the Ready state):
+
+**For the version with simulated UE and eNodeB**
+
+
+**For the version with OTS UE and SDR-based eNodeB**
+
 For Simulated UE, log onto `epc` node and run:
 
     sudo /local/repository/bin/start_oai.pl -r sim
