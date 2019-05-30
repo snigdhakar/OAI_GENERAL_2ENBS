@@ -108,12 +108,12 @@ pc.defineParameter("FIXED_ENB", "Bind to a specific eNodeB",
                    longDescription="Input the name of a PhantomNet eNodeB device to allocate (e.g., 'nuc1').  Leave blank to let the mapping algorithm choose.  If you bind both UE and eNodeB devices, mapping will fail unless there is path between them via the attenuator matrix.")
 
 pc.defineParameter("TYPE", "Experiment type",
-                   portal.ParameterType.STRING,"ota",[("sim","Simulated UE"),("atten","Real UE with attenuator"),("ota","Over the air")],
-                   longDescription="*Simulated UE*: OAI simulated UE connects to an OAI eNodeB and EPC. *Real UE with attenuator*: Real RF devices will be connected via transmission lines with variable attenuator control. *Over the air*: Real RF devices with real antennas and transmissions propagated through free space will be selected.")
-
-#pc.defineParameter("RADIATEDRF", "Radiated (over-the-air) RF transmissions",
-#                   portal.ParameterType.BOOLEAN, False,
-#                   longDescription="When enabled, RF devices with real antennas and transmissions propagated through free space will be selected.  Leave disabled (default) to assign RF devices connected via transmission lines with variable attenuator control.")
+                   portal.ParameterType.STRING,"sim",[("sim","Simulated RAN"),("atten","OTS UE with RF attenuator")],
+                   longDescription="*Simulated RAN*: OAI simulated UE/eNodeB connected to an OAI EPC. *OTS UE with RF attenuator*: OTS UE (Nexus 5) connected to controllable RF attenuator matrix.")
+                   
+#pc.defineParameter("TYPE", "Experiment type",
+#                   portal.ParameterType.STRING,"ota",[("sim","Simulated UE"),("atten","Real UE with attenuator"),("ota","Over the air")],
+#                   longDescription="*Simulated UE*: OAI simulated UE connects to an OAI eNodeB and EPC. *Real UE with attenuator*: Real RF devices will be connected via transmission lines with variable attenuator control. *Over the air*: Real RF devices with real antennas and transmissions propagated through free space will be selected.")                   
 
 params = pc.bindParameters()
 
@@ -150,7 +150,8 @@ else:
         enb1.component_id = params.FIXED_ENB
     enb1.hardware_type = GLOBALS.NUC_HWTYPE
     enb1.disk_image = GLOBALS.OAI_ENB_IMG
-    enb1.Desire( "rf-radiated" if params.TYPE == "ota" else "rf-controlled", 1 )
+#    enb1.Desire( "rf-radiated" if params.TYPE == "ota" else "rf-controlled", 1 )
+    enb1.Desire( "rf-controlled", 1 )
     connectOAI_DS(enb1, 0)
     enb1.addService(rspec.Execute(shell="sh", command=GLOBALS.OAI_CONF_SCRIPT + " -r ENB"))
     enb1_rue1_rf = enb1.addInterface("rue1_rf")
@@ -161,7 +162,8 @@ else:
         rue1.component_id = params.FIXED_UE
     rue1.hardware_type = GLOBALS.UE_HWTYPE
     rue1.disk_image = GLOBALS.UE_IMG
-    rue1.Desire( "rf-radiated" if params.TYPE == "ota" else "rf-controlled", 1 )
+#    rue1.Desire( "rf-radiated" if params.TYPE == "ota" else "rf-controlled", 1 )
+    rue1.Desire( "rf-controlled", 1 )    
     rue1.adb_target = "adb-tgt"
     rue1_enb1_rf = rue1.addInterface("enb1_rf")
 
