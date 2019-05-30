@@ -19,8 +19,8 @@ controlled RF attenuator and connected to an EPC.
 
 The simulated version of the profile uses the following resources:
 
-	* A d430 compute node running the OAI simulated UE and eNodeB ('sim-enb') 
-	* A d430 compute node running the OAI EPC (HSS, MME, SPGW) ('epc')
+  * A d430 compute node running the OAI simulated UE and eNodeB ('sim-enb') 
+  * A d430 compute node running the OAI EPC (HSS, MME, SPGW) ('epc')
 
 The OTS UE/SDR-based eNodeB version of the profile includes
 the following resources:
