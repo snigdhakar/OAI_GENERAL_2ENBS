@@ -12,16 +12,25 @@ import geni.urn as URN
 
 tourDescription = """
 Use this profile to instantiate an experiment using Open Air Interface
-to realize an end-to-end SDR-based mobile network. This profile includes
+to realize an end-to-end LTE mobile network. The profile supports two
+variants: (i) a simulated RAN (UE and eNodeB) connected to an EPC, or
+(ii) an OTS UE (Nexus 5) connected to an SDR-based eNodeB via a
+controlled RF attenuator and connected to an EPC.
+
+The simulated version of the profile uses the following resources:
+
+	* A d430 compute node running the OAI simulated UE and eNodeB ('sim-enb') 
+	* A d430 compute node running the OAI EPC (HSS, MME, SPGW) ('epc')
+
+The OTS UE/SDR-based eNodeB version of the profile includes
 the following resources:
 
   * Off-the-shelf Nexus 5 UE running Android 4.4.4 KitKat ('rue1')
-  * SDR eNodeB (Intel NUC + USRP B210) running OAI on Ubuntu 16 ('enb1')
-  * All-in-one EPC node (HSS, MME, SPGW) running OAI on Ubuntu 16 ('epc')
-  * A node providing out-of-band ADB access to the UE ('adb-tgt')
+  * SDR eNodeB (Intel NUC + USRP B210) running OAI eNodeB ('enb1')
+  * A d430 compute node running the OAI EPC (HSS, MME, SPGW) ('epc')
+  * A d430 compute node providing out-of-band ADB access to the UE ('adb-tgt')
 
-PhantomNet startup scripts automatically configure OAI for the
-specific allocated resources.
+Startup scripts automatically configure OAI for the specific allocated resources.
 
 For more detailed information:
 
@@ -102,14 +111,14 @@ pc = portal.Context()
 #
 pc.defineParameter("FIXED_UE", "Bind to a specific UE",
                    portal.ParameterType.STRING, "", advanced=True,
-                   longDescription="Input the name of a PhantomNet UE node to allocate (e.g., 'ue1').  Leave blank to let the mapping algorithm choose.")
+                   longDescription="Input the name of a POWDER controlled RF UE node to allocate (e.g., 'ue1').  Leave blank to let the mapping algorithm choose.")
 pc.defineParameter("FIXED_ENB", "Bind to a specific eNodeB",
                    portal.ParameterType.STRING, "", advanced=True,
-                   longDescription="Input the name of a PhantomNet eNodeB device to allocate (e.g., 'nuc1').  Leave blank to let the mapping algorithm choose.  If you bind both UE and eNodeB devices, mapping will fail unless there is path between them via the attenuator matrix.")
+                   longDescription="Input the name of a POWDER controlled RF eNodeB device to allocate (e.g., 'nuc1').  Leave blank to let the mapping algorithm choose.  If you bind both UE and eNodeB devices, mapping will fail unless there is path between them via the attenuator matrix.")
 
 pc.defineParameter("TYPE", "Experiment type",
                    portal.ParameterType.STRING,"sim",[("sim","Simulated UE/eNodeB"),("atten","OTS UE with RF attenuator")],
-                   longDescription="*Simulated RAN*: OAI simulated UE/eNodeB connected to an OAI EPC. *OTS UE with RF attenuator*: OTS UE (Nexus 5) connected to controllable RF attenuator matrix.")
+                   longDescription="*Simulated RAN*: OAI simulated UE/eNodeB connected to an OAI EPC. *OTS UE/SDR-based eNodeB with RF attenuator connected to OAI EPC*: OTS UE (Nexus 5) connected to controllable RF attenuator matrix.")
                    
 params = pc.bindParameters()
 
