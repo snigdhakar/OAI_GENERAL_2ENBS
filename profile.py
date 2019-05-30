@@ -43,6 +43,20 @@ After your experiment swapped in succesfully (i.e., is in the Ready state):
 
 **For the version with simulated UE and eNodeB**
 
+Log onto the `epc` node and run:
+
+    sudo /local/repository/bin/start_oai.pl -r sim
+
+This will start up the EPC services on the `epc`node *and* the
+simulated UE/eNodeB on the `sim-enb` node.
+
+Log onto the `sim-enb` to verify the functionality:
+
+	ping -I oip1 8.8.8.8
+	
+You can also look at the output of the simulated UE/eNodeB process:
+
+	sudo screen -r sim_enb
 
 **For the version with OTS UE and SDR-based eNodeB**
 
@@ -55,7 +69,7 @@ To view the output of the eNodeB:
 	sudo screen -r enb
 
 
-Log onto the `epc` node ans start the EPC services:
+Log onto the `epc` node and start the EPC services:
 
 	sudo /local/repository/bin/start_oai.pl
 	
@@ -68,7 +82,7 @@ Then (still on `adb-tgt`) get an ADB shell on the UE by running:
 	adb shell
 	
 If the UE successfully connected you should be able to ping an address on
-the Internet, e.g.,
+the Internet from the ADB shell, e.g.,
 
 	ping 8.8.8.8
 	
@@ -78,29 +92,10 @@ or by executing `reboot` directly in the ADB shell on the UE). And then repeatin
 the `pnadb -a` and `adb shell` commands to get back on the UE to test.
 
 
+While OAI is still a system in development and may be unstable, you can usually recover
+from any issue by running `start_oai.pl` to restart all the services.
 
-
-
-
-For Simulated UE, log onto `epc` node and run:
-
-    sudo /local/repository/bin/start_oai.pl -r sim
-
-Else, log onto either the `enb1` or `epc` nodes. From there, you will be able to start all OAI services across the network by running:
-
-    sudo /local/repository/bin/start_oai.pl
-
-Above command will stop any currently running OAI services, start all services (both epc and enodeb) again, and then interactively show a tail of the logs of the mme and enodeb services. Once you see the logs, you can exit at any time with Ctrl-C, but the services stay running in the background and save logs to `/var/log/oai/*` on the `enb1` and `epc` nodes.
-
-Once all the services are running, the UE device will typically connect on its own, but if it doesn't you can reboot the phone. You can manage the UE by logging into the `adb-tgt` node, running `pnadb -a` to connect, and then managing it via any `adb` command such as `adb shell` or `adb reboot`.
-
-For Simulated UE experiment, check the connectivity by logging into the `sim-enb` node and run:
-
-    ping -I oip1 8.8.8.8
-
-While OAI is still a system in development and may be unstable, you can usually recover from any issue by running `start_oai.pl` to restart all the services.
-
-  * [Full Documentation](https://gitlab.flux.utah.edu/powder-profiles/OAI-Real-Hardware/blob/master/README.md)
+  * [More details](https://gitlab.flux.utah.edu/powder-profiles/OAI-GENERAL/blob/master/README.md)
 
 """;
 
