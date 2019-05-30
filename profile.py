@@ -34,7 +34,7 @@ Startup scripts automatically configure OAI for the specific allocated resources
 
 For more detailed information:
 
-  * [Getting Started](https://gitlab.flux.utah.edu/powder-profiles/OAI-Real-Hardware/blob/master/README.md)
+  * [Getting Started](https://gitlab.flux.utah.edu/powder-profiles/OAI-GENERAL/blob/master/README.md)
 
 """;
 
