@@ -46,6 +46,42 @@ After your experiment swapped in succesfully (i.e., is in the Ready state):
 
 **For the version with OTS UE and SDR-based eNodeB**
 
+Log onto the `enb1` node and start the eNodeB service:
+
+	sudo /local/repository/bin/enb.start.sh
+	
+To view the output of the eNodeB:
+
+	sudo screen -r enb
+
+
+Log onto the `epc` node ans start the EPC services:
+
+	sudo /local/repository/bin/start_oai.pl
+	
+To log onto the UE (`rue1`), first log onto the `adb-tgt` node and start up the adb daemon:
+
+	pnadb -a
+
+Then (still on `adb-tgt`) get an ADB shell on the UE by running:
+
+	adb shell
+	
+If the UE successfully connected you should be able to ping an address on
+the Internet, e.g.,
+
+	ping 8.8.8.8
+	
+If the UE did not connect by itself, (i.e., you get a "Network is unreachable" error),
+you might have to reboot the UE (by executing `adb reboot` from the `adb-tgt` node,
+or by executing `reboot` directly in the ADB shell on the UE). And then repeating
+the `pnadb -a` and `adb shell` commands to get back on the UE to test.
+
+
+
+
+
+
 For Simulated UE, log onto `epc` node and run:
 
     sudo /local/repository/bin/start_oai.pl -r sim
