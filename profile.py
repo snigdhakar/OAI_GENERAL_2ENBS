@@ -117,7 +117,6 @@ class GLOBALS(object):
     OAI_ENB_IMG = URN.Image(PN.PNDEFS.PNET_AM, "PhantomNet:OAI-Real-Hardware.enb1")
     OAI_SIM_IMG = URN.Image(PN.PNDEFS.PNET_AM, "PhantomNet:UBUNTU14-64-OAI")
     OAI_CONF_SCRIPT = "/usr/bin/sudo /local/repository/bin/config_oai.pl"
-    SIM_HWTYPE = "d430"
     NUC_HWTYPE = "nuc5300"
     UE_HWTYPE = "nexus5"
 
@@ -146,6 +145,13 @@ pc = portal.Context()
 #
 # Profile parameters.
 #
+
+sim_hardware_types = ['d430','d740']
+
+pc.defineParameter("TYPE", "Experiment type",
+                   portal.ParameterType.STRING,"sim",[("sim","Simulated UE/eNodeB"),("atten","OTS UE with RF attenuator")],
+                   longDescription="*Simulated RAN*: OAI simulated UE/eNodeB connected to an OAI EPC. *OTS UE/SDR-based eNodeB with RF attenuator connected to OAI EPC*: OTS UE (Nexus 5) connected to controllable RF attenuator matrix.")
+
 pc.defineParameter("FIXED_UE", "Bind to a specific UE",
                    portal.ParameterType.STRING, "", advanced=True,
                    longDescription="Input the name of a POWDER controlled RF UE node to allocate (e.g., 'ue1').  Leave blank to let the mapping algorithm choose.")
@@ -153,10 +159,11 @@ pc.defineParameter("FIXED_ENB", "Bind to a specific eNodeB",
                    portal.ParameterType.STRING, "", advanced=True,
                    longDescription="Input the name of a POWDER controlled RF eNodeB device to allocate (e.g., 'nuc1').  Leave blank to let the mapping algorithm choose.  If you bind both UE and eNodeB devices, mapping will fail unless there is path between them via the attenuator matrix.")
 
-pc.defineParameter("TYPE", "Experiment type",
-                   portal.ParameterType.STRING,"sim",[("sim","Simulated UE/eNodeB"),("atten","OTS UE with RF attenuator")],
-                   longDescription="*Simulated RAN*: OAI simulated UE/eNodeB connected to an OAI EPC. *OTS UE/SDR-based eNodeB with RF attenuator connected to OAI EPC*: OTS UE (Nexus 5) connected to controllable RF attenuator matrix.")
-                   
+pc.defineParameter("SIM_HWTYPE", "Compute hardware type to use (SIM mode only)",
+                   portal.ParameterType.STRING, sim_hardware_types[0],
+                   sim_hardware_types, advanced=True,
+                   longDescription="Use this parameter if you would like to select a different hardware type to use FOR SIMULATED MODE.  The types in this list are known to work.")
+
 params = pc.bindParameters()
 
 #
@@ -177,7 +184,7 @@ epclink = request.Link("s1-lan")
 if params.TYPE == "sim":
     sim_enb = request.RawPC("sim-enb")
     sim_enb.disk_image = GLOBALS.OAI_SIM_IMG
-    sim_enb.hardware_type = GLOBALS.SIM_HWTYPE
+    sim_enb.hardware_type = params.SIM_HWTYPE
     sim_enb.addService(rspec.Execute(shell="sh", command=GLOBALS.OAI_CONF_SCRIPT + " -r SIM_ENB"))
     connectOAI_DS(sim_enb, 1)
     epclink.addNode(sim_enb)
