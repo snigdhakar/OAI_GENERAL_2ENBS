@@ -177,8 +177,8 @@ pc.verifyParameters()
 # to request in our experiment, and their configuration.
 #
 request = pc.makeRequestRSpec()
-epclink1 = request.Link("s1-lan")
-epclink2 = request.Link("s1-lan")
+epclink1 = request.Link("s1-lan1")
+epclink2 = request.Link("s1-lan2")
 
 # Checking for oaisim
 
