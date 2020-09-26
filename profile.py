@@ -177,7 +177,8 @@ pc.verifyParameters()
 # to request in our experiment, and their configuration.
 #
 request = pc.makeRequestRSpec()
-epclink = request.Link("s1-lan")
+epclink1 = request.Link("s1-lan")
+epclink2 = request.Link("s1-lan")
 
 # Checking for oaisim
 
@@ -203,6 +204,17 @@ else:
     connectOAI_DS(enb1, 0)
     enb1.addService(rspec.Execute(shell="sh", command=GLOBALS.OAI_CONF_SCRIPT + " -r ENB"))
     enb1_rue1_rf = enb1.addInterface("rue1_rf")
+	
+	# Add another NUC eNB node.
+    enb2 = request.RawPC("enb2")
+    if params.FIXED_ENB:
+        enb2.component_id = params.FIXED_ENB
+    enb2.hardware_type = GLOBALS.NUC_HWTYPE
+    enb2.disk_image = GLOBALS.OAI_ENB_IMG
+    enb2.Desire( "rf-controlled", 1 )
+    connectOAI_DS(enb2, 0)
+    enb2.addService(rspec.Execute(shell="sh", command=GLOBALS.OAI_CONF_SCRIPT + " -r ENB"))
+    enb2_rue1_rf = enb2.addInterface("rue1_rf")
 
     # Add an OTS (Nexus 5) UE
     rue1 = request.UE("rue1")
@@ -213,14 +225,22 @@ else:
     rue1.Desire( "rf-controlled", 1 )    
     rue1.adb_target = "adb-tgt"
     rue1_enb1_rf = rue1.addInterface("enb1_rf")
+	
+	rue1_enb2_rf = rue1.addInterface("enb2_rf")
 
     # Create the RF link between the Nexus 5 UE and eNodeB
+    rflink1 = request.RFLink("rflink1")
+    rflink1.addInterface(enb1_rue1_rf)
+    rflink1.addInterface(rue1_enb1_rf)
+	
     rflink2 = request.RFLink("rflink2")
-    rflink2.addInterface(enb1_rue1_rf)
-    rflink2.addInterface(rue1_enb1_rf)
+    rflink2.addInterface(enb2_rue1_rf)
+    rflink2.addInterface(rue1_enb2_rf)
 
     # Add a link connecting the NUC eNB and the OAI EPC node.
-    epclink.addNode(enb1)
+    epclink1.addNode(enb1)
+	
+	epclink2.addNode(enb2)
 
 # Add OAI EPC (HSS, MME, SPGW) node.
 epc = request.RawPC("epc")
@@ -228,10 +248,15 @@ epc.disk_image = GLOBALS.OAI_EPC_IMG
 epc.addService(rspec.Execute(shell="sh", command=GLOBALS.OAI_CONF_SCRIPT + " -r EPC"))
 connectOAI_DS(epc, 0)
  
-epclink.addNode(epc)
-epclink.link_multiplexing = True
-epclink.vlan_tagging = True
-epclink.best_effort = True
+epclink1.addNode(epc)
+epclink1.link_multiplexing = True
+epclink1.vlan_tagging = True
+epclink1.best_effort = True
+
+epclink2.addNode(epc)
+epclink2.link_multiplexing = True
+epclink2.vlan_tagging = True
+epclink2.best_effort = True
 
 tour = IG.Tour()
 tour.Description(IG.Tour.MARKDOWN, tourDescription)
