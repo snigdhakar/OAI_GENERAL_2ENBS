@@ -226,7 +226,7 @@ else:
     rue1.adb_target = "adb-tgt"
     rue1_enb1_rf = rue1.addInterface("enb1_rf")
 	
-	rue1_enb2_rf = rue1.addInterface("enb2_rf")
+    rue1_enb2_rf = rue1.addInterface("enb2_rf")
 
     # Create the RF link between the Nexus 5 UE and eNodeB
     rflink1 = request.RFLink("rflink1")
@@ -240,7 +240,7 @@ else:
     # Add a link connecting the NUC eNB and the OAI EPC node.
     epclink1.addNode(enb1)
 	
-	epclink2.addNode(enb2)
+    epclink2.addNode(enb2)
 
 # Add OAI EPC (HSS, MME, SPGW) node.
 epc = request.RawPC("epc")
