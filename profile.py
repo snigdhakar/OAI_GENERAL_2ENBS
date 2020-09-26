@@ -188,7 +188,7 @@ if params.TYPE == "sim":
     sim_enb.hardware_type = params.SIM_HWTYPE
     sim_enb.addService(rspec.Execute(shell="sh", command=GLOBALS.OAI_CONF_SCRIPT + " -r SIM_ENB"))
     connectOAI_DS(sim_enb, 1)
-    epclink.addNode(sim_enb)
+    epclink1.addNode(sim_enb)
 else:
     # Add a node to act as the ADB target host
     adb_t = request.RawPC("adb-tgt")
