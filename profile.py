@@ -177,7 +177,7 @@ pc.verifyParameters()
 # to request in our experiment, and their configuration.
 #
 request = pc.makeRequestRSpec()
-epclink1 = request.Link("s1-lan1")
+epclink1 = request.Link("s1-lan")
 epclink2 = request.Link("s1-lan2")
 
 # Checking for oaisim
@@ -203,7 +203,7 @@ else:
     enb1.Desire( "rf-controlled", 1 )
     connectOAI_DS(enb1, 0)
     enb1.addService(rspec.Execute(shell="sh", command=GLOBALS.OAI_CONF_SCRIPT + " -r ENB"))
-    enb1_rue1_rf = enb1.addInterface("rue1_rf")
+    enb1_rue_rf = enb1.addInterface("rue_rf")
 	
 	# Add another NUC eNB node.
     enb2 = request.RawPC("enb2")
@@ -214,7 +214,7 @@ else:
     enb2.Desire( "rf-controlled", 1 )
     connectOAI_DS(enb2, 0)
     enb2.addService(rspec.Execute(shell="sh", command=GLOBALS.OAI_CONF_SCRIPT + " -r ENB"))
-    enb2_rue1_rf = enb2.addInterface("rue1_rf")
+    enb2_rue1_rf = enb2.addInterface("rue2_rf")
 
     # Add an OTS (Nexus 5) UE
     rue1 = request.UE("rue1")
@@ -229,7 +229,7 @@ else:
     rue1_enb2_rf = rue1.addInterface("enb2_rf")
 
     # Create the RF link between the Nexus 5 UE and eNodeB
-    rflink1 = request.RFLink("rflink1")
+    rflink1 = request.RFLink("rflink")
     rflink1.addInterface(enb1_rue1_rf)
     rflink1.addInterface(rue1_enb1_rf)
 	
