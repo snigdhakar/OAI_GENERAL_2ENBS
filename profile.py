@@ -203,7 +203,7 @@ else:
     enb1.Desire( "rf-controlled", 1 )
     connectOAI_DS(enb1, 0)
     enb1.addService(rspec.Execute(shell="sh", command=GLOBALS.OAI_CONF_SCRIPT + " -r ENB"))
-    enb1_rue_rf = enb1.addInterface("rue_rf")
+    enb1_rue1_rf = enb1.addInterface("rue1_rf")
 	
 	# Add another NUC eNB node.
     enb2 = request.RawPC("enb2")
